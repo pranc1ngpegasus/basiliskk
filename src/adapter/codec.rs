@@ -1,5 +1,6 @@
 use crate::domain::error::BasiliskkErr;
 use crate::domain::model::request::Request;
+use crate::domain::model::request_body::RequestBody;
 use crate::domain::model::request_header::RequestHeader;
 use bytes::BytesMut;
 use tokio_util::codec::Decoder;
@@ -58,7 +59,7 @@ impl Decoder for SkkCodecImpl {
                 DecodeState::Data => match self.decode_body(src) {
                     Some(data) => {
                         self.state = DecodeState::Head;
-                        parsed.body = data.to_vec();
+                        parsed.body = RequestBody::try_from(data.to_vec())?;
 
                         return Ok(Some(parsed));
                     }

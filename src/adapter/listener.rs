@@ -36,7 +36,7 @@ impl Listener for ListenerImpl {
                     let mut frame_reader = FramedRead::new(socket, SkkCodecImpl::new());
                     while let Some(frame) = frame_reader.next().await {
                         match frame {
-                            Ok(data) => debug!("Received data: {:?}", data),
+                            Ok(data) => debug!("Received data: {}", data),
                             Err(e) => error!("failed to read data; {}", e),
                         }
                     }
