@@ -32,7 +32,7 @@ jobs:
           profile: minimal
       - uses: Swatinem/rust-cache@v2
         with:
-          shared-key: issuing
+          shared-key: basiliskk
       - uses: actions-rs/cargo@v1
         with:
           command: check
@@ -51,7 +51,7 @@ jobs:
           profile: minimal
       - uses: Swatinem/rust-cache@v2
         with:
-          shared-key: issuing
+          shared-key: basiliskk
       - uses: actions-rs/clippy-check@v1
         with:
           args: --no-deps --all
@@ -70,7 +70,7 @@ jobs:
           profile: minimal
       - uses: Swatinem/rust-cache@v2
         with:
-          shared-key: issuing
+          shared-key: basiliskk
       - uses: actions-rs/cargo@v1
         with:
           command: fmt
