@@ -31,7 +31,7 @@ jobs:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
       - uses: Swatinem/rust-cache@v2
         with:
-          shared-key: issuing
+          shared-key: basiliskk
       - uses: taiki-e/cache-cargo-install-action@v1
         with:
           tool: cargo-udeps
