@@ -10,6 +10,18 @@ pub enum RequestHeader {
     Completion,
 }
 
+impl std::fmt::Display for RequestHeader {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Self::Disconnect => write!(f, "Disconnect"),
+            Self::Conversion => write!(f, "Conversion"),
+            Self::Version => write!(f, "Version"),
+            Self::HostInfo => write!(f, "HostInfo"),
+            Self::Completion => write!(f, "Completion"),
+        }
+    }
+}
+
 impl TryFrom<Vec<u8>> for RequestHeader {
     type Error = BasiliskkErr;
 
