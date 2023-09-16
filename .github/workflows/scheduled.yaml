@@ -1,0 +1,41 @@
+name: Scheduled
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-security
+  cancel-in-progress: true
+jobs:
+  audit:
+    name: audit
+    timeout-minutes: 5
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions-rs/audit-check@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+  cargo-udeps:
+    name: cargo udeps
+    timeout-minutes: 5
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions-rs/toolchain@v1
+        with:
+          override: true
+          toolchain: nightly
+      - uses: arduino/setup-protoc@v2
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: Swatinem/rust-cache@v2
+        with:
+          shared-key: issuing
+      - uses: taiki-e/cache-cargo-install-action@v1
+        with:
+          tool: cargo-udeps
+      - uses: actions-rs/cargo@v1
+        with:
+          command: udeps
+          args: --all-targets --locked

@@ -1,0 +1,121 @@
+name: Lint
+on:
+  pull_request:
+  workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-lint
+  cancel-in-progress: true
+jobs:
+  actionlint:
+    needs: changes
+    if: ${{ needs.changes.outputs.actions == 'true' }}
+    name: actionlint
+    timeout-minutes: 5
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: reviewdog/action-actionlint@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-pr-review
+  cargo-check:
+    needs: changes
+    if: ${{ needs.changes.outputs.rust == 'true' }}
+    name: cargo check
+    timeout-minutes: 5
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions-rs/toolchain@v1
+        with:
+          components: clippy, rustfmt
+          profile: minimal
+      - uses: Swatinem/rust-cache@v2
+        with:
+          shared-key: issuing
+      - uses: actions-rs/cargo@v1
+        with:
+          command: check
+          args: --all
+  cargo-clippy:
+    needs: changes
+    if: ${{ needs.changes.outputs.rust == 'true' }}
+    name: cargo clippy
+    timeout-minutes: 5
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions-rs/toolchain@v1
+        with:
+          components: clippy
+          profile: minimal
+      - uses: Swatinem/rust-cache@v2
+        with:
+          shared-key: issuing
+      - uses: actions-rs/clippy-check@v1
+        with:
+          args: --no-deps --all
+          token: ${{ secrets.GITHUB_TOKEN }}
+  cargo-fmt:
+    needs: changes
+    if: ${{ needs.changes.outputs.rust == 'true' }}
+    name: cargo fmt
+    timeout-minutes: 5
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions-rs/toolchain@v1
+        with:
+          components: rustfmt
+          profile: minimal
+      - uses: Swatinem/rust-cache@v2
+        with:
+          shared-key: issuing
+      - uses: actions-rs/cargo@v1
+        with:
+          command: fmt
+          args: --all --check
+  changes:
+    name: detect changes
+    timeout-minutes: 5
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          filters: |
+            actions:
+              - '.github/workflows/**'
+            rust:
+              - '**/*.rs'
+              - '**/Cargo.toml'
+              - '**/Cargo.lock'
+    outputs:
+      actions: ${{ steps.filter.outputs.actions }}
+      rust: ${{ steps.filter.outputs.rust }}
+  misspell:
+    needs: changes
+    if: ${{ needs.changes.outputs.rust == 'true' }}
+    name: misspell
+    timeout-minutes: 5
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: reviewdog/action-misspell@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-pr-review
+  yamlfmt:
+    needs: changes
+    if: ${{ needs.changes.outputs.actions == 'true' }}
+    name: yamlfmt
+    timeout-minutes: 5
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v4
+        with:
+          cache: true
+      - run: go install github.com/google/yamlfmt/cmd/yamlfmt@latest
+      - run: find .github/workflows -type f -print0 | xargs -0 yamlfmt -lint -quiet
