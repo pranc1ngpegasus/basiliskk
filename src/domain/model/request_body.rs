@@ -1,6 +1,5 @@
 use crate::domain::error::BasiliskkErr;
-use encoding::all::EUC_JP;
-use encoding::{DecoderTrap, Encoding};
+use encoding_rs::EUC_JP;
 
 #[derive(Debug, Default, PartialEq)]
 pub struct RequestBody(String);
@@ -9,10 +8,10 @@ impl TryFrom<Vec<u8>> for RequestBody {
     type Error = BasiliskkErr;
 
     fn try_from(input: Vec<u8>) -> Result<Self, Self::Error> {
-        match EUC_JP.decode(input.as_slice(), DecoderTrap::Ignore) {
-            Ok(decoded) => Ok(RequestBody(decoded)),
-            Err(e) => Err(BasiliskkErr {
-                desc: format!("failed to decode request body. {}", e),
+        match EUC_JP.decode(&input) {
+            (decoded, _, false) => Ok(RequestBody(decoded.to_string())),
+            (_, _, true) => Err(BasiliskkErr {
+                desc: String::from("failed to decode request body"),
             }),
         }
     }
