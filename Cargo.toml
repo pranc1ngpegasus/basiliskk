@@ -16,7 +16,7 @@ test-case = "3.2.1"
 tokio = { version = "1.32.0", features = ["rt-multi-thread", "net", "macros"] }
 tokio-stream = "0.1.14"
 tokio-util = { version = "0.7.9", features = ["codec"] }
-tracing = { version = "0.1.37" }
+tracing = { version = "0.1.40" }
 tracing-subscriber = { version = "0.3.17", features = ["json", "env-filter"] }
 
 [profile.release]
