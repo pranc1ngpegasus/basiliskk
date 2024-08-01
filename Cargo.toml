@@ -1,0 +1,8 @@
+[package]
+edition = "2021"
+name = "basiliskk"
+version = "0.1.0"
+
+[dependencies]
+anyhow = "1.0.86"
+encoding_rs = "0.8.34"
