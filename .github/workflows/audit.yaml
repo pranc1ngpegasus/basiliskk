@@ -1,0 +1,28 @@
+name: audit
+on:
+  schedule:
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-audit
+  cancel-in-progress: true
+jobs:
+  trivy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: fs
+          format: json
+          output: result.json
+          ignore-unfixed: true
+      - uses: CemitDigital/trivy-report-issue-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          input-filename: result.json
+          assignee: pranc1ngpegasus
