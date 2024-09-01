@@ -1,0 +1,11 @@
+[package]
+authors.workspace = true
+edition.workspace = true
+name = "basiliskk-logger"
+version.workspace = true
+
+[dependencies]
+anyhow.workspace = true
+tracing.workspace = true
+tracing-subscriber.features = ["env-filter", "json"]
+tracing-subscriber.workspace = true
