@@ -1,0 +1,18 @@
+[package]
+authors.workspace = true
+edition.workspace = true
+name = "basiliskk"
+version.workspace = true
+
+[dependencies]
+
+[workspace]
+members = []
+resolver = "2"
+
+[workspace.dependencies]
+
+[workspace.package]
+authors = ["pranc1ngpegasus"]
+edition = "2021"
+version = "0.0.0"
