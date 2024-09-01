@@ -11,13 +11,16 @@ shadow-rs.workspace = true
 shadow-rs.workspace = true
 
 [workspace]
-members = ["basiliskk-logger"]
+members = ["basiliskk-config", "basiliskk-logger"]
 resolver = "2"
 
 [workspace.dependencies]
 anyhow = "1.0.86"
+basiliskk-config.path = "basiliskk-config"
 basiliskk-logger.path = "basiliskk-logger"
+serde = "1.0.209"
 shadow-rs = "0.33.0"
+toml = "0.8.19"
 tracing = "0.1.40"
 tracing-subscriber = "0.3.18"
 

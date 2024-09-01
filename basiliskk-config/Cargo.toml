@@ -1,0 +1,11 @@
+[package]
+authors.workspace = true
+edition.workspace = true
+name = "basiliskk-config"
+version.workspace = true
+
+[dependencies]
+anyhow.workspace = true
+serde.features = ["derive"]
+serde.workspace = true
+toml.workspace = true
