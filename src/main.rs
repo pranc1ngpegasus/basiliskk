@@ -1,3 +1,7 @@
+use shadow_rs::shadow;
+
+shadow!(build);
+
 fn main() {
-    println!("Hello, world!");
+    println!("{}", build::SHORT_COMMIT);
 }

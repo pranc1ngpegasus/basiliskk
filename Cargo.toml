@@ -5,12 +5,17 @@ name = "basiliskk"
 version.workspace = true
 
 [dependencies]
+shadow-rs.workspace = true
+
+[build-dependencies]
+shadow-rs.workspace = true
 
 [workspace]
 members = []
 resolver = "2"
 
 [workspace.dependencies]
+shadow-rs = "0.33.0"
 
 [workspace.package]
 authors = ["pranc1ngpegasus"]
