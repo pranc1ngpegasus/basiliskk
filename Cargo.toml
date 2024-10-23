@@ -15,7 +15,7 @@ members = ["basiliskk-config", "basiliskk-logger"]
 resolver = "2"
 
 [workspace.dependencies]
-anyhow = "1.0.90"
+anyhow = "1.0.91"
 basiliskk-config.path = "basiliskk-config"
 basiliskk-logger.path = "basiliskk-logger"
 serde = "1.0.210"
